@@ -17,20 +17,15 @@ app.use(cors({
 app.use(express.json()); 
 app.use(express.urlencoded({extended: true})); 
 
-router.get('/', (req, res, next)=>{
-  res.json({success: true, 
-  message: "Habibi Come to dubai"})
-})
-
 router.post("/send/mail", async(req, res, next)=>{
   
   
-  const {name, email, message} = req. body;
+  const {name, email, message} = req.body;
   if(!name || !email || !message){
      return next(res.status(400).json({
       success: false, 
-      message: "Please aprovide all details"
-     })) 
+      message: "Please provide all details"
+  })) 
   }
   try{
     await sendEmail({

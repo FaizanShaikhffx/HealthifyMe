@@ -1,16 +1,40 @@
 import { Section } from "lucide-react";
 import React, { useState } from "react";
 import { ClipLoader } from "react-spinners";
-
+import axios from "axios"
+import { toast } from 'react-toastify';
 const Contact = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const sentMail = async(e) => {
+    e.preventDefault();
+    setLoading(true); 
+    try{
+      const {data} = await axios.post("http://localhost:4000/send/mail", {
+        name, 
+        email, 
+        message 
+      }, {
+        withCredentials: true, 
+        headers: {"Content-Type": "application/json"}
+      })
+      setName("");
+      setEmail(""); 
+      setMessage("")
+      toast.success(data.message)
+      setLoading(false)
+    }catch(error){
+    setLoading(false); 
+      toast.error(error.response.data.message)
+    }
+  } 
+
   return (
     <section className="contact bg-gray-100 p-8 rounded-lg shadow-md max-w-4xl mx-auto my-10">
-      <form className="space-y-6">
+      <form className="space-y-6" onSubmit={sentMail}>
         <h1 className="text-2xl font-bold text-center text-gray-800">Contact Us</h1>
         <div>
           <label className="block text-gray-700 text-sm font-semibold mb-2">Name</label>
