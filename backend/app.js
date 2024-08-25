@@ -1,6 +1,7 @@
 import express from 'express'; 
 import { config } from 'dotenv';
 import cors from 'cors'; 
+import { sendEmail } from './utils/sendEmail.js';
 
 const app = express(); 
 const router = express.Router(); 
@@ -21,6 +22,36 @@ router.get('/', (req, res, next)=>{
   message: "Habibi Come to dubai"})
 })
 
+router.post("/send/mail", async(req, res, next)=>{
+  
+  
+  const {name, email, message} = req. body;
+  if(!name || !email || !message){
+     return next(res.status(400).json({
+      success: false, 
+      message: "Please aprovide all details"
+     })) 
+  }
+  try{
+    await sendEmail({
+      email: "faizanshaikh3122002@gmail.com", 
+      subject: "GYM Website Contact", 
+      message,   
+      userEmail: email,
+
+    })
+    res.status(200).json({
+      success: true, 
+      message: "Message sent successfully"
+    })
+  } 
+  catch(err){
+    res.status(500).json({
+      success: false, 
+      message: "Internal Server Error"
+    })
+  }
+})
 app.use(router)
 
 app.listen(process.env.PORT, ()=>{
