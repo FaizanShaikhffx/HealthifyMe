@@ -6,8 +6,7 @@ import './index.css'
 
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import WorkOutSession from './components/WorkOutSession'
-import Gallery from './components/Gallery'
+
 
 import Contact from './components/Contact'
 import BMICalculator from './components/BMICalculator'
@@ -19,8 +18,8 @@ function App() {
     <>
       <Navbar/>
       <Hero/>
-      {/* <WorkOutSession/> */}
-      {/* <Gallery/> */}
+      
+      
       <BMICalculator/>
       <Contact/>
       <Footer/>
