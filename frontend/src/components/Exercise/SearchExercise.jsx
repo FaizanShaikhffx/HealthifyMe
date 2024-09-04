@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { exerciseOptions, fetchData} from '../utils/fetchData';
-import { CloudCog } from 'lucide-react';
 
+import HorizontalScrollbar from './HorizontalScrollbar.jsx';
 
 const SearchExercise = () => {
 
   const [search, setSearch] = useState(''); 
   const [exercise, setExercise] = useState([])
+  const [bodyParts, setBodyParts ] = useState([]) 
+
+  useEffect(()=>{
+    const fetchExercisesData = async () =>{
+      const bodyPartsData = await fetchData('https://exercisedb.p.rapidapi.com/exercises/bodyPartList', exerciseOptions) 
+      console.log(bodyPartsData);
+      setBodyParts(['all', ...bodyPartsData]);
+    }
+    fetchExercisesData(); 
+  }, [])
 
   const handleSearch = async() =>{
     if(search){
@@ -42,6 +52,10 @@ const SearchExercise = () => {
         >
           Search
         </button>
+      </div>
+      <div>
+         <HorizontalScrollbar  data={bodyParts}/>
+         
       </div>
     </div>
   );
