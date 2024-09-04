@@ -1,64 +1,65 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import { exerciseOptions, fetchData} from '../utils/fetchData';
+import React, { useEffect, useState } from 'react';
+import { exerciseOptions, fetchData } from '../utils/fetchData';
+import HorizontalScrollbar from './HorizontalScrollbar';
 
-import HorizontalScrollbar from './HorizontalScrollbar.jsx';
 
-const SearchExercise = () => {
 
-  const [search, setSearch] = useState(''); 
-  const [exercise, setExercise] = useState([])
-  const [bodyParts, setBodyParts ] = useState([]) 
-
-  useEffect(()=>{
-    const fetchExercisesData = async () =>{
-      const bodyPartsData = await fetchData('https://exercisedb.p.rapidapi.com/exercises/bodyPartList', exerciseOptions) 
-      console.log(bodyPartsData);
-      setBodyParts(['all', ...bodyPartsData]);
-    }
-    fetchExercisesData(); 
-  }, [])
-
-  const handleSearch = async() =>{
-    if(search){
-      const exerciseData = await fetchData('https://exercisedb.p.rapidapi.com/exercises', exerciseOptions);
-      const searchedExercises = exerciseData.filter(
-           (exercise)=> exercise.name.toLowerCase().includes(search)
-        || exercise.target.toLowerCase().includes(search)
-        || exercise.equipment.toLowerCase().includes(search)
-        || exercise.bodyPart.toLowerCase().includes(search)
-      )
-      setSearch(""); 
-      setExercise(searchedExercises)
-    }
-  }
+const SearchExercises = ({ setExercises, bodyPart, setBodyPart }) => {
+  const [search, setSearch] = useState('');
+  const [bodyParts, setBodyParts] = useState([]);
   
+  useEffect(() => {
+    const fetchExercisesData = async () => {
+      const bodyPartsData = await fetchData('https://exercisedb.p.rapidapi.com/exercises/bodyPartList', exerciseOptions);
+
+      setBodyParts(['all', ...bodyPartsData]);
+    };
+
+    fetchExercisesData();
+  }, []);
+
+  const handleSearch = async () => {
+    if (search) {
+      const exercisesData = await fetchData('https://exercisedb.p.rapidapi.com/exercises', exerciseOptions);
+      const searchedExercises = exercisesData.filter(
+        (item) => item.name.toLowerCase().includes(search)
+               || item.target.toLowerCase().includes(search)
+               || item.equipment.toLowerCase().includes(search)
+               || item.bodyPart.toLowerCase().includes(search),
+      );
+
+      window.scrollTo({ top: 1800, left: 100, behavior: 'smooth' });
+
+      setSearch('');
+      setExercises(searchedExercises);
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center p-3 bg-gray-100 min-h-screen">
-      <div className="mb-6">
-        <h2 className="text-3xl font-bold text-gray-800">Awesome Exercises You Should Know</h2>
-      </div>
-      <div className="flex items-center w-[60%] ">
+    <div className="flex flex-col items-center mt-9 p-5">
+      <h1 className="font-bold text-center mb-12 text-4xl lg:text-5xl">
+        Awesome Exercises You <br /> Should Know
+      </h1>
+      <div className="relative mb-18 w-full flex justify-center">
         <input
-          type="text"
-          className="flex-grow p-3 text-lg border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="h-20 w-11/12 lg:w-3/4 p-4 text-lg font-bold rounded-full border-none"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e.target.value.toLowerCase())}
           placeholder="Search Exercises"
+          type="text"
         />
-        <button className="p-3 ml-1 text-lg font-semibold text-white bg-blue-500 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        onClick={handleSearch}
-        
+        <button
+          className="absolute right-0 h-14 w-20 lg:w-44 bg-red-600 text-white text-lg lg:text-xl rounded-full"
+          onClick={handleSearch}
         >
           Search
         </button>
       </div>
-      <div>
-         <HorizontalScrollbar  data={bodyParts}/>
-         
+      <div className="relative w-full p-5">
+        <HorizontalScrollbar data={bodyParts} bodyParts setBodyPart={setBodyPart} bodyPart={bodyPart} />
       </div>
     </div>
   );
 };
 
-export default SearchExercise;
+export default SearchExercises;
