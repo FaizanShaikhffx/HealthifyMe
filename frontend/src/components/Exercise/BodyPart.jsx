@@ -1,26 +1,18 @@
 import React from 'react';
 import Icon from '../../assets/icons/gym.png';
 
-
-const BodyPart = ({ item, setBodyPart, bodyPart }) => {
-  
-  const isSelected = bodyPart === item;
-
-  return (
-    <div
-      className={`flex flex-col items-center justify-center p-4 m-2 bg-white rounded-bl-lg cursor-pointer transition-transform duration-200 ${
-        isSelected ? 'border-t-4 border-red-500' : ''
-      }`}
-      style={{ width: '270px', height: '282px', gap: '47px' }}
-      onClick={() => {
-        setBodyPart(item);
-        window.scrollTo({ top: 1800, left: 100, behavior: 'smooth' });
-      }}
-    >
-      <img src={Icon} alt="dumbbell" className="w-10 h-10" />
-      <h3 className="text-2xl font-bold font-serif text-[#3A1212] capitalize">{item}</h3>
-    </div>
-  );
-};
+const BodyPart = ({ item, setBodyPart, bodyPart }) => (
+  <div
+    role="button"
+    className={`flex flex-col items-center justify-center cursor-pointer gap-12 w-68 h-70 rounded-bl-2xl ${bodyPart === item ? 'border-t-4 border-red-600 bg-white' : 'bg-white'}`}
+    onClick={() => {
+      setBodyPart(item);
+      window.scrollTo({ top: 1800, left: 100, behavior: 'smooth' });
+    }}
+  >
+    <img src={Icon} alt="dumbbell" className="w-10 h-10" />
+    <p className="text-2xl font-bold font-serif text-red-900 capitalize">{item}</p>
+  </div>
+);
 
 export default BodyPart;
